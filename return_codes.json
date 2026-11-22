@@ -1,0 +1,7 @@
+{
+    "0":"no error found",
+    "1":"FATAL ERROR:error in start filesystem: Impossible to create logbook path",
+    "2":"FATAL ERROR:Impossible to read logbook path",
+    "3":"FATAL ERROR:unknow error in start filesystem",
+    "":""
+}
