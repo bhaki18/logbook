@@ -1,32 +1,57 @@
 use std::env;
 use std::fs;
 use owo_colors::OwoColorize;
+use std::io;
 
-pub fn start_fs() -> u32{// return status code
+pub fn start_fs() -> io::Result<u32>{// return status code
     let home = env::var("HOME").unwrap(); 
     let logbook_mem_dir = home.clone() + "/.logbook_memories";
+    let memories_dir = logbook_mem_dir.clone() + "/memories";
+    let works_dir = logbook_mem_dir.clone() + "/works";
 
-    let check_path = fs::exists(&logbook_mem_dir);
-
-    if check_path.as_ref().is_ok_and(|x| *x == false){
-        println!("logbook dir not found...");
-        println!("creating path:{}",logbook_mem_dir);
-        if fs::create_dir_all(&logbook_mem_dir).is_ok(){
-            println!("path created successful:{}",logbook_mem_dir);
-        }else{
-            println!("FATAL ERROR:failed creating path:{}",logbook_mem_dir);
-            return 1;
-        }
+    let logbook_mem_dir_output = check_path(logbook_mem_dir.clone())?;
+    if !logbook_mem_dir_output{
+        let _ = create_path(logbook_mem_dir.clone())?;
     }
 
-    if check_path.is_err(){
-        println!("{:?}",("FATAL ERROR:Unable to check logbook path:{}".red(),logbook_mem_dir.clone()));
-        return 2;
+    let memories_dir_output = check_path(memories_dir.clone())?;
+    if !memories_dir_output{
+        let _ = create_path(memories_dir.clone())?;
     }
 
-    if fs::exists(logbook_mem_dir).is_ok_and(|x| x == true){
-        return 0;
+    let works_dir_output = check_path(works_dir.clone())?;
+    if !works_dir_output{
+        let _ = create_path(works_dir)?;
     }
 
-    return 3;
+    return Ok(0);
+}
+
+pub fn check_path(path:String)-> io::Result<bool>{
+    let ret = fs::exists(&path);
+
+    if ret.as_ref().is_ok_and(|x| *x == false){
+        return Ok(false);
+    }else if ret.is_err(){
+        println!("{:?}",("FATAL ERROR:Unable to check path:{}",path));
+        return Err(io::Error::new(io::ErrorKind::PermissionDenied,"5"));
+    }else if ret.as_ref().is_ok_and(|x| *x == true){
+        return Ok(true);
+    }else{
+        return Err(io::Error::new(io::ErrorKind::Other,"6"));
+    }
+
+}   
+
+pub fn create_path(path:String) -> io::Result<u32>{
+    let ret = fs::create_dir_all(&path);
+
+    if ret.as_ref().is_ok(){
+        return Ok(0);
+    }else if ret.is_err(){
+        println!("{:?}",("FATAL ERROR:Unable to create path:{}",path));
+        return Err(io::Error::new(io::ErrorKind::PermissionDenied,"7"));
+    }else{
+        return Err(io::Error::new(io::ErrorKind::Other,"8"));
+    }
 }

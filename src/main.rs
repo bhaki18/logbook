@@ -4,5 +4,5 @@ mod tools;
 
 
 fn main() {
-    
+   let status = cli::cli::cli(); 
 }

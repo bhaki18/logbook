@@ -4,7 +4,7 @@ use std::env;
 use std::fs;
 use chrono::{Local, Utc};
 
-pub fn create_new_memory()-> u32{
+pub fn create_new_memory()-> Result<u32,io::Error>{
     let local_now = Local::now();
     let date = local_now.format("%Y-%m-%d");
     let home = env::var("HOME").unwrap(); 
@@ -14,10 +14,11 @@ pub fn create_new_memory()-> u32{
 
     println!("what name do you wanna give to your memory?");
     io::stdin().read_line(&mut memory_name);
-    memory_path = memory_path + "/" + memory_name;
+    memory_path = memory_path + "/" + &memory_name;
     
     let output = Command::new("nano")
-    .arg(memory_path);
+    .arg(memory_path)
+    .status()?;
 
-    return 0;
+    Ok(0)
 }
