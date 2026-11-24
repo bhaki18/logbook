@@ -28,18 +28,9 @@ pub fn start_fs() -> io::Result<u32>{// return status code
 }
 
 pub fn check_path(path:String)-> io::Result<bool>{
-    let ret = fs::exists(&path);
+    let ret = fs::exists(&path)?;
 
-    if ret.as_ref().is_ok_and(|x| *x == false){
-        return Ok(false);
-    }else if ret.is_err(){
-        println!("{:?}",("FATAL ERROR:Unable to check path:{}",path));
-        return Err(io::Error::new(io::ErrorKind::PermissionDenied,"5"));
-    }else if ret.as_ref().is_ok_and(|x| *x == true){
-        return Ok(true);
-    }else{
-        return Err(io::Error::new(io::ErrorKind::Other,"6"));
-    }
+    Ok(ret)
 
 }   
 
