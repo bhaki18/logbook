@@ -14,3 +14,29 @@ run it
 ``` bash
 logbook
 ```
+
+## structure of the data
+
+``` folder
+
+.logbook_memories/
+    memories/
+        date1/
+            memo
+            memo
+            memo
+        date2/
+            memo
+            memo
+            memo
+    works/
+        name_work/
+            file
+            file
+            file
+        name_work2/
+            file
+            file
+            file
+
+```

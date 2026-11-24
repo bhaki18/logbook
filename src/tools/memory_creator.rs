@@ -22,8 +22,8 @@ pub fn create_new_memory()-> Result<u32,io::Error>{
     io::stdin().read_line(&mut memory_name)?;
     memory_name = memory_name.trim().to_string();
     if memory_name.contains("/"){
-         return Err(Error::new(
-            ErrorKind::InvalidInput,
+         return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
             "the name must not contain any \"/\"."
          )
         )
